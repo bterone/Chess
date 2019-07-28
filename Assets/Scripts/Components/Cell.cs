@@ -12,12 +12,15 @@ public class Cell : MonoBehaviour
     [HideInInspector]
     public Board board = null;
     [HideInInspector]
-    public RectTransform RectTransform = null;
+    public RectTransform rectTransform = null;
+
+    [HideInInspector]
+    public BasePiece currentPiece = null;
 
     public void Setup(Vector2Int newBoardPosition, Board newBoard) {
         boardPosition = newBoardPosition;
         board = newBoard;
 
-        RectTransform = GetComponent<RectTransform>();
+        rectTransform = GetComponent<RectTransform>();
     }
 }

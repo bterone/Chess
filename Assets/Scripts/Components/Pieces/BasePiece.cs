@@ -27,7 +27,7 @@ public abstract class BasePiece : EventTrigger
         // Cell stuff
         currentCell = newCell;
         originalCell = newCell;
-        //currentCell.currentPiece = this;
+        currentCell.currentPiece = this;
 
         // Object stuff
         transform.position = newCell.transform.position;
