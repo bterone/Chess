@@ -2,24 +2,24 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Board : MonoBehaviour {
-    public GameObject CellPrefab;
+    public GameObject cellPrefab;
 
     [HideInInspector]
-    public Cell[,] AllCells = new Cell[8, 8];
+    public Cell[,] allCells = new Cell[8, 8];
 
     public void Create() {
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 8; x++) {
                 // Create the cell
-                GameObject newCell = Instantiate(CellPrefab, transform);
+                GameObject newCell = Instantiate(cellPrefab, transform);
 
                 // Position
                 RectTransform rectTransform = newCell.GetComponent<RectTransform>();
                 rectTransform.anchoredPosition = new Vector2((x * 100), (y * 100));
 
                 // Setup
-                AllCells[x, y] = newCell.GetComponent<Cell>();
-                AllCells[x, y].Setup(new Vector2Int(x, y), this);
+                allCells[x, y] = newCell.GetComponent<Cell>();
+                allCells[x, y].Setup(new Vector2Int(x, y), this);
             }
         }
 
@@ -31,7 +31,7 @@ public class Board : MonoBehaviour {
                 int finalX = x + offset;
 
                 //Color
-                AllCells[finalX, y].GetComponent<Image>().color = new Color32(230, 220, 187, 255);
+                allCells[finalX, y].GetComponent<Image>().color = new Color32(230, 220, 187, 255);
             }
         }
     }

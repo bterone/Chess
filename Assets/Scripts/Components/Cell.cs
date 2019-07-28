@@ -5,18 +5,18 @@ using UnityEngine.UI;
 
 public class Cell : MonoBehaviour
 {
-    public Image OutlineImage;
+    public Image outlineImage;
 
     [HideInInspector]
-    public Vector2Int BoardPosition = Vector2Int.zero;
+    public Vector2Int boardPosition = Vector2Int.zero;
     [HideInInspector]
-    public Board Board = null;
+    public Board board = null;
     [HideInInspector]
     public RectTransform RectTransform = null;
 
     public void Setup(Vector2Int newBoardPosition, Board newBoard) {
-        BoardPosition = newBoardPosition;
-        Board = newBoard;
+        boardPosition = newBoardPosition;
+        board = newBoard;
 
         RectTransform = GetComponent<RectTransform>();
     }
