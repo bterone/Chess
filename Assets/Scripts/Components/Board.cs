@@ -15,7 +15,7 @@ public class Board : MonoBehaviour {
 
                 // Position
                 RectTransform rectTransform = newCell.GetComponent<RectTransform>();
-                rectTransform.anchoredPosition = new Vector2((x * 100), (y * 100));
+                rectTransform.anchoredPosition = new Vector2((x * 100) + 50, (y * 100) + 50);
 
                 // Setup
                 allCells[x, y] = newCell.GetComponent<Cell>();
