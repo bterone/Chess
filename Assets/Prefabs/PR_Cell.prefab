@@ -88,10 +88,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6aec9a1a20e0c334199bf13c3d205fc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outlineImage: {fileID: 0}
+  outlineImage: {fileID: 114070471298161070}
   boardPosition: {x: 0, y: 0}
   board: {fileID: 0}
-  RectTransform: {fileID: 0}
+  rectTransform: {fileID: 0}
+  currentPiece: {fileID: 0}
 --- !u!1 &1868451835561092
 GameObject:
   m_ObjectHideFlags: 0
