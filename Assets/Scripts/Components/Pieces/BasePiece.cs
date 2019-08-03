@@ -14,6 +14,8 @@ public abstract class BasePiece : EventTrigger
     protected RectTransform rectTransform = null;
     protected PieceManager pieceManager;
 
+    protected Cell targetCell = null;
+
     protected Vector3Int movement = Vector3Int.one;
     protected List<Cell> highlightedCells = new List<Cell>();
 
@@ -38,6 +40,23 @@ public abstract class BasePiece : EventTrigger
         gameObject.SetActive(true);
     }
 
+    public void Reset()
+    {
+        Kill();
+
+        Place(originalCell);
+    }
+
+    public virtual void Kill()
+    {
+        // Clear current cell
+        currentCell.currentPiece = null;
+
+        // Remove piece
+        gameObject.SetActive(false);
+    }
+
+    #region Movement
     private void CreateCellPath(int xDirection, int yDirection, int movement)
     {
         // Target position
@@ -90,6 +109,24 @@ public abstract class BasePiece : EventTrigger
         highlightedCells.Clear();
     }
 
+    protected virtual void Move()
+    {
+        // If there is an enemy piece, remove it
+        targetCell.RemovePiece();
+
+        // Clear current
+        currentCell.currentPiece = null;
+
+        // Switch cells
+        currentCell = targetCell;
+        currentCell.currentPiece = this;
+
+        // Move on board
+        transform.position = currentCell.transform.position;
+        targetCell = null;
+    }
+    #endregion
+
     #region Events
     public override void OnBeginDrag(PointerEventData eventData)
     {
@@ -108,6 +145,20 @@ public abstract class BasePiece : EventTrigger
 
         // Follow pointer
         transform.position += (Vector3)eventData.delta;
+
+        // Check for overlapping available squares
+        foreach (Cell cell in highlightedCells)
+        {
+            if (RectTransformUtility.RectangleContainsScreenPoint(cell.rectTransform, Input.mousePosition))
+            {
+                // If the mouse is within a valid cell, get it, and break.
+                targetCell = cell;
+                break;
+            }
+
+            // If the mouse is not within any highlighted cell, we don't have a valid move.
+            targetCell = null;
+        }
     }
 
     public override void OnEndDrag(PointerEventData eventData)
@@ -116,6 +167,16 @@ public abstract class BasePiece : EventTrigger
 
         // Hide
         ClearCells();
+
+        // Return to original position if no target cell
+        if (!targetCell)
+        {
+            transform.position = currentCell.gameObject.transform.position;
+            return;
+        }
+
+        // Move to new cell
+        Move();
     }
     #endregion
 }
