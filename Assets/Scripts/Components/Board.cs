@@ -1,6 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum CellState
+{
+    None,
+    Friendly,
+    Enemy,
+    Free,
+    OutOfBounds
+}
+
 public class Board : MonoBehaviour {
     public GameObject cellPrefab;
 
@@ -34,5 +43,32 @@ public class Board : MonoBehaviour {
                 allCells[finalX, y].GetComponent<Image>().color = new Color32(230, 220, 187, 255);
             }
         }
+    }
+
+    public CellState ValidateCell(int targetX, int targetY, BasePiece checkingPiece)
+    {
+        // Bounds check
+        if (targetX < 0 || targetX > 7)
+            return CellState.OutOfBounds;
+
+        if (targetY < 0 || targetY > 7)
+            return CellState.OutOfBounds;
+
+        // Get cell
+        Cell targetCell = allCells[targetX, targetY];
+
+        // If the cell has a piece
+        if (targetCell.currentPiece != null)
+        {
+            // If friendly
+            if (checkingPiece.color == targetCell.currentPiece.color)
+                return CellState.Friendly;
+
+            // If enemy
+            if (checkingPiece.color != targetCell.currentPiece.color)
+                return CellState.Enemy;
+        }
+
+        return CellState.Free;
     }
 }

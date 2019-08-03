@@ -57,7 +57,7 @@ public abstract class BasePiece : EventTrigger
     }
 
     #region Movement
-    private void CreateCellPath(int xDirection, int yDirection, int movement)
+    private void CreateCellPath(int targetX, int targetY, int movement)
     {
         // Target position
         int currentX = currentCell.boardPosition.x;
@@ -66,10 +66,23 @@ public abstract class BasePiece : EventTrigger
         // Check each cell
         for (int i = 1; i <= movement; i++)
         {
-            currentX += xDirection;
-            currentY += yDirection;
+            currentX += targetX;
+            currentY += targetY;
 
-            // TODO: Get the state of the target cell
+            // Get the state of the target cell
+            CellState cellState = CellState.None;
+            cellState = currentCell.board.ValidateCell(currentX, currentY, this);
+
+            // If enemy, add to list, break
+            if (cellState == CellState.Enemy)
+            {
+                highlightedCells.Add(currentCell.board.allCells[currentX, currentY]);
+                break;
+            }
+
+            // If the cell is not free, break
+            if (cellState != CellState.Free)
+                break;
 
             // Add to list
             highlightedCells.Add(currentCell.board.allCells[currentX, currentY]);
@@ -177,6 +190,9 @@ public abstract class BasePiece : EventTrigger
 
         // Move to new cell
         Move();
+
+        // End turn
+        pieceManager.SwitchSides(color);
     }
     #endregion
 }
