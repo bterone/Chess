@@ -76,17 +76,55 @@ public abstract class BasePiece : EventTrigger
             // If enemy, add to list, break
             if (cellState == CellState.Enemy)
             {
-                highlightedCells.Add(currentCell.board.allCells[currentX, currentY]);
+                AddHighlightCell(currentX, currentY);
                 break;
             }
 
             // If the cell is not free, break
+            // Breaks loop if cell is Friendly or Out of Bounds
             if (cellState != CellState.Free)
                 break;
 
             // Add to list
-            highlightedCells.Add(currentCell.board.allCells[currentX, currentY]);
+            AddHighlightCell(currentX, currentY);
         }
+    }
+
+    private void CreateSingleCellPath(int targetX, int targetY)
+    {
+        // Target position
+        int currentX = currentCell.boardPosition.x;
+        int currentY = currentCell.boardPosition.y;
+
+        // Check cell
+        CellState cellState = CellState.None;
+        cellState = currentCell.board.ValidateCell(targetX, targetY, this);
+
+        // If enemy or free cell, add to list, break
+        if (cellState == CellState.Enemy || cellState == CellState.Free)
+        {
+            AddHighlightCell(targetX, targetY);
+        }
+    }
+
+    private void AddHighlightCell(int targetX, int targetY)
+    {
+        highlightedCells.Add(currentCell.board.allCells[targetX, targetY]);
+    }
+
+    public bool MatchesState(int targetX, int targetY, CellState targetState)
+    {
+        CellState cellState = CellState.None;
+        cellState = currentCell.board.ValidateCell(targetX, targetY, this);
+
+        if (cellState == targetState)
+        {
+            // TODO: Use method instead
+            highlightedCells.Add(currentCell.board.allCells[targetX, targetY]);
+            return true;
+        }
+
+        return false;
     }
 
     protected virtual void CheckPathing()

@@ -25,20 +25,6 @@ public class Pawn : BasePiece
         isFirstMove = false;
     }
 
-    private bool MatchesState(int targetX, int targetY, CellState targetState)
-    {
-        CellState cellState = CellState.None;
-        cellState = currentCell.board.ValidateCell(targetX, targetY, this);
-
-        if (cellState == targetState)
-        {
-            highlightedCells.Add(currentCell.board.allCells[targetX, targetY]);
-            return true;
-        }
-
-        return false;
-    }
-
     protected override void CheckPathing()
     {
         // Target position

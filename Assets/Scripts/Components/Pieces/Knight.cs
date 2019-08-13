@@ -9,7 +9,6 @@ public class Knight : BasePiece
         base.Setup(newTeamColor, newSpriteColor, newPieceManager);
 
         // Knight stuff
-        // TODO: Movement
         GetComponent<Image>().sprite = Resources.Load<Sprite>("T_Knight");
     }
 
