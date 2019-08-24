@@ -136,6 +136,8 @@ public class PieceManager : MonoBehaviour
             Destroy(piece.gameObject);
         }
 
+        promotedPieces.Clear();
+
         // Reset white
         foreach (BasePiece piece in whitePieces)
             piece.Reset();
