@@ -40,7 +40,7 @@ public abstract class BasePiece : EventTrigger
         gameObject.SetActive(true);
     }
 
-    public void Reset()
+    public virtual void Reset()
     {
         Kill();
 

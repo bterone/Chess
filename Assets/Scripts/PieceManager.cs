@@ -11,6 +11,7 @@ public class PieceManager : MonoBehaviour
 
     private List<BasePiece> whitePieces = null;
     private List<BasePiece> blackPieces = null;
+    private List<BasePiece> promotedPieces = new List<BasePiece>();
 
     private string[] pieceOrder = new string[16]
     {
@@ -48,20 +49,12 @@ public class PieceManager : MonoBehaviour
 
         for (int i = 0; i < pieceOrder.Length; i++)
         {
-            // Create new object
-            GameObject newPieceObject = Instantiate(piecePrefab);
-            newPieceObject.transform.SetParent(transform);
-
-            // Set scale and position
-            newPieceObject.transform.localScale = new Vector3(1, 1, 1);
-            newPieceObject.transform.localRotation = Quaternion.identity;
-
             // Get the type, apply to new object
             string key = pieceOrder[i];
             Type pieceType = pieceLibrary[key];
 
             // Store new piece
-            BasePiece newPiece = (BasePiece)newPieceObject.AddComponent(pieceType);
+            BasePiece newPiece = CreatePiece(pieceType);
             newPieces.Add(newPiece);
 
             // Setup piece
@@ -69,6 +62,21 @@ public class PieceManager : MonoBehaviour
         }
 
         return newPieces;
+    }
+
+    private BasePiece CreatePiece(Type pieceType)
+    {
+        // Create new object
+        GameObject newPieceObject = Instantiate(piecePrefab);
+        newPieceObject.transform.SetParent(transform);
+
+        // Set scale and position
+        newPieceObject.transform.localScale = new Vector3(1, 1, 1);
+        newPieceObject.transform.localRotation = Quaternion.identity;
+
+        BasePiece newPiece = (BasePiece)newPieceObject.AddComponent(pieceType);
+
+        return newPiece;
     }
 
     private void PlacePieces(int pawnRow, int royaltyRow, List<BasePiece> pieces, Board board)
@@ -108,10 +116,26 @@ public class PieceManager : MonoBehaviour
         // Set interactivity
         SetInteractive(whitePieces, !isBlackTurn);
         SetInteractive(blackPieces, isBlackTurn);
+
+        // Set promoted interactivity
+        foreach(BasePiece piece in promotedPieces)
+        {
+            bool isBlackPiece = piece.color != Color.white ? true : false;
+            bool isPartOfTeam = isBlackPiece == true ? isBlackTurn : !isBlackTurn;
+
+            piece.enabled = isPartOfTeam;
+        }
     }
 
     public void ResetPieces()
     {
+        foreach(BasePiece piece in promotedPieces)
+        {
+            piece.Kill();
+
+            Destroy(piece.gameObject);
+        }
+
         // Reset white
         foreach (BasePiece piece in whitePieces)
             piece.Reset();
@@ -119,5 +143,21 @@ public class PieceManager : MonoBehaviour
         foreach (BasePiece piece in blackPieces)
             piece.Reset();
 
+    }
+
+    public void PromotePiece(Pawn pawn, Cell cell, Color teamColor, Color spriteColor)
+    {
+        // Kill pawn
+        pawn.Kill();
+
+        // Create
+        BasePiece promotedPiece = CreatePiece(typeof(Queen));
+        promotedPiece.Setup(teamColor, spriteColor, this);
+
+        // Place
+        promotedPiece.Place(cell);
+
+        // Add to promoted list
+        promotedPieces.Add(promotedPiece);
     }
 }
