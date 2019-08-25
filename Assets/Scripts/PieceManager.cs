@@ -16,7 +16,7 @@ public class PieceManager : MonoBehaviour
     private string[] pieceOrder = new string[16]
     {
         "P","P","P","P","P","P","P","P",
-        "R","KN","B","K","Q","B","KN","R"
+        "R","KN","B","Q","K","B","KN","R"
     };
 
     private Dictionary<string, Type> pieceLibrary = new Dictionary<string, Type>()

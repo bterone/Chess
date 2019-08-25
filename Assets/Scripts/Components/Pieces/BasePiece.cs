@@ -7,6 +7,7 @@ public abstract class BasePiece : EventTrigger
 {
     [HideInInspector]
     public Color color = Color.clear;
+    public bool isFirstMove = true;
 
     protected Cell originalCell = null;
     protected Cell currentCell = null;
@@ -40,11 +41,13 @@ public abstract class BasePiece : EventTrigger
         gameObject.SetActive(true);
     }
 
-    public virtual void Reset()
+    public void Reset()
     {
         Kill();
 
         Place(originalCell);
+
+        isFirstMove = true;
     }
 
     public virtual void Kill()
@@ -175,6 +178,8 @@ public abstract class BasePiece : EventTrigger
         // Move on board
         transform.position = currentCell.transform.position;
         targetCell = null;
+
+        isFirstMove = false;
     }
     #endregion
 

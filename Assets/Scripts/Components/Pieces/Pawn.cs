@@ -3,8 +3,6 @@ using UnityEngine.UI;
 
 public class Pawn : BasePiece
 {
-    private bool isFirstMove = true;
-
     public override void Setup(Color newTeamColor, Color32 newSpriteColor, PieceManager newPieceManager)
     {
         // Base setup
@@ -21,8 +19,6 @@ public class Pawn : BasePiece
     protected override void Move()
     {
         base.Move();
-
-        isFirstMove = false;
 
         CheckForPromotion();
     }
@@ -63,12 +59,5 @@ public class Pawn : BasePiece
 
         // Top right
         MatchesState(currentX + movement.z, currentY + movement.z, CellState.Enemy);
-    }
-
-    public override void Reset()
-    {
-        base.Reset();
-
-        isFirstMove = true;
     }
 }
